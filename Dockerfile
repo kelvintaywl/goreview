@@ -1,5 +1,8 @@
 FROM golang:1.9-alpine AS goreview-build
 
+ARG GITHUB_TOKEN
+
+RUN echo "machine github.com login $GITHUB_TOKEN" > ~/.netrc
 RUN apk --update add make git
 
 WORKDIR /go/src/github.com/kelvintaywl/goreview
