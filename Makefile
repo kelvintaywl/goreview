@@ -30,4 +30,4 @@ run:
 
 .PHONY: docker_run
 docker_run:
-	godotenv docker run --rm -p 127.0.0.1:$(SERVER_PORT):$(SERVER_PORT) kelvintaywl/goreview:$(IMAGE_TAG)
+	godotenv docker run --rm -p 127.0.0.1:$(SERVER_PORT):$(SERVER_PORT) -e GITHUB_ACCESS_TOKEN=$(GITHUB_ACCESS_TOKEN) kelvintaywl/goreview:$(IMAGE_TAG)
