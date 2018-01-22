@@ -68,10 +68,9 @@ func (c proxy) AssignReviewers(ctx context.Context, owner, repo string, prNum in
 }
 
 // NewGithubClient returns a GithubClient.
-func NewGithubClient() GithubClient {
-	ctx := context.Background()
+func NewGithubClient(ctx context.Context) GithubClient {
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: os.Getenv(domain.GithubTokenEnv)},
+		&oauth2.Token{AccessToken: os.Getenv(domain.GitHubTokenEnv)},
 	)
 	tc := oauth2.NewClient(ctx, ts)
 	c := github.NewClient(tc)

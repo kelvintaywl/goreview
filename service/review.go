@@ -13,7 +13,7 @@ import (
 // FetchConfig ...
 func FetchConfig(ctx context.Context, data domain.PullRequestEventPayload) (*domain.ReviewConfig, error) {
 	// TODO: use redis to store fetched config so we dont need to always fetch it
-	gc := NewGithubClient()
+	gc := NewGithubClient(ctx)
 	cfgJSON, err := gc.GetContents(
 		ctx,
 		data.Repository.Owner.Name,
@@ -66,7 +66,7 @@ func RandomReviewers(ctx context.Context, cfg domain.ReviewConfig, exclude strin
 
 // AssignReviewers ...
 func AssignReviewers(ctx context.Context, data domain.PullRequestEventPayload, cfg domain.ReviewConfig) error {
-	gc := NewGithubClient()
+	gc := NewGithubClient(ctx)
 	reviewers, err := RandomReviewers(ctx, cfg, data.User.Name)
 	if err != nil {
 		return err

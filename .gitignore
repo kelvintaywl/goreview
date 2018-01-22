@@ -16,3 +16,7 @@ vendor
 
 # binary
 goreview
+
+# -- coverage
+coverage.*
+*.coverprofile

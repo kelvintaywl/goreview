@@ -2,6 +2,8 @@
 
 include $(CURDIR)/.env
 
+TESTPKGS = $(shell go list ./... | grep -v cmd | grep -v test | grep -v vendor | grep -v script | grep -v examples)
+
 REPO := github.com/kelvintaywl/goreview
 IMAGE_TAG ?= latest
 
@@ -14,7 +16,21 @@ dep:
 init:
 	go get -u github.com/golang/dep/cmd/dep
 	go get -u github.com/joho/godotenv/cmd/godotenv
+	go get -u github.com/go-playground/overalls
 	make dep
+
+.PHONY: test
+test:
+	godotenv go test -v $(TESTPKGS)
+
+.PHONY: coverage
+coverage:
+	godotenv overalls \
+	-project github.com/kelvintaywl/goreview \
+	-covermode atomic \
+	-ignore=cmd,examples,vendor, \
+	-concurrency 1
+	@mv overalls.coverprofile coverage.txt
 
 .PHONY: build
 build:

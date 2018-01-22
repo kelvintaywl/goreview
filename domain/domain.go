@@ -1,7 +1,8 @@
 package domain
 
 const (
-	GithubTokenEnv string = "GITHUB_ACCESS_TOKEN"
+	GitHubTokenEnv string = "GITHUB_ACCESS_TOKEN"
+	GitHubURL      string = "https://github.com/kelvintaywl/goreview"
 )
 
 type (

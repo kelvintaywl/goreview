@@ -17,8 +17,7 @@ const (
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("FIX ME"))
+	http.Redirect(w, r, domain.GitHubURL, http.StatusMovedPermanently)
 }
 
 func HookHandler(w http.ResponseWriter, r *http.Request) {
