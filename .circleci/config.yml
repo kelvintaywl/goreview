@@ -1,14 +1,33 @@
 version: 2
+
+dependencies:
+  cache_directories:
+    - ~/docker
+
 jobs:
   deploy:
-    working_directory: /go/src/github.com/kelvintaywl/goreview
+    working_directory:  /go/src/github.com/kelvintaywl/goreview
     docker:
-      - image:  circleci/golang:1.9
+      - image: circle-ci/golang1.9
     steps:
       - run:
-          name: todo
+          name: login to Heroku Container Registry
+          command: docker login --email=$HEROKU_LOGIN --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
+      - add_ssh_keys:
+          fingerprints:
+            - "c5:e5:0f:fe:1f:24:af:01:47:e8:8a:3f:c1:98:98:bc"
+      - run:
+          name: install dep
           command: |
-            echo "need to set up steps to push image to docker hub"
+            make init
+      - run:
+          name: docker build
+          command: |
+            make docker_build
+      - run:
+          name: push container to Heroku
+          command: |
+            docker push registry.heroku.com/kelvintaywl/goreview/web:latest
   build:
     working_directory: /go/src/github.com/kelvintaywl/goreview
     docker:

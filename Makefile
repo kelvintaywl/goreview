@@ -5,6 +5,7 @@ include $(CURDIR)/.env
 TESTPKGS = $(shell go list ./... | grep -v cmd | grep -v test | grep -v vendor | grep -v script | grep -v examples)
 
 REPO := github.com/kelvintaywl/goreview
+HEROKU_APP_NAME := kelvintaywl/goreview
 IMAGE_TAG ?= latest
 
 
@@ -38,7 +39,7 @@ build:
 
 .PHONY: docker_build
 docker_build:
-	godotenv docker build --rm -t kelvintaywl/goreview:$(IMAGE_TAG) .
+	godotenv docker build --rm -t registry.heroku.com/$(HEROKU_APP_NAME)/web:$(IMAGE_TAG) .
 
 .PHONY: run
 run:
@@ -46,4 +47,4 @@ run:
 
 .PHONY: docker_run
 docker_run:
-	godotenv docker run --rm -p 127.0.0.1:$(SERVER_PORT):$(SERVER_PORT) -e GITHUB_ACCESS_TOKEN=$(GITHUB_ACCESS_TOKEN) kelvintaywl/goreview:$(IMAGE_TAG)
+	godotenv docker run --rm -p 127.0.0.1:$(SERVER_PORT):$(SERVER_PORT) -e GITHUB_ACCESS_TOKEN=$(GITHUB_ACCESS_TOKEN) registry.heroku.com/$(HEROKU_APP_NAME)/web:$(IMAGE_TAG)
