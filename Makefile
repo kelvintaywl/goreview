@@ -39,7 +39,7 @@ build:
 
 .PHONY: docker_build
 docker_build:
-	godotenv docker build --rm -t registry.heroku.com/$(HEROKU_APP_NAME)/web:$(IMAGE_TAG) .
+	godotenv docker build --rm -t kelvintaywl/goreview:$(IMAGE_TAG) .
 
 .PHONY: run
 run:
@@ -47,4 +47,4 @@ run:
 
 .PHONY: docker_run
 docker_run:
-	godotenv docker run --rm -p 127.0.0.1:$(SERVER_PORT):$(SERVER_PORT) -e GITHUB_ACCESS_TOKEN=$(GITHUB_ACCESS_TOKEN) registry.heroku.com/$(HEROKU_APP_NAME)/web:$(IMAGE_TAG)
+	godotenv docker run --rm -p 127.0.0.1:$(PORT):9999 -e GITHUB_ACCESS_TOKEN=$(GITHUB_ACCESS_TOKEN) kelvintaywl/goreview:$(IMAGE_TAG)

@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 
 	hdlr "github.com/kelvintaywl/goreview/handler"
 )
@@ -11,7 +13,12 @@ import (
 var serverPort int
 
 func init() {
-	flag.IntVar(&serverPort, "port", 9999, "port to expose for server")
+	p := os.Getenv("PORT")
+	port, err := strconv.Atoi(p)
+	if err != nil {
+		port = 9999
+	}
+	flag.IntVar(&serverPort, "port", port, "port to expose for server")
 }
 
 func main() {
