@@ -19,6 +19,7 @@ This is needed to make calls with GitHub API.
 Next, add a `goreview.json` in the root directory of your GitHub repository.
 
 This GitHub repository is the repository we want Goreview to assign reviewers.
+For example, https://github.com/pipedpiper/nothotdog
 
 See a [sample goreview.json file](goreview.json)
 
@@ -30,6 +31,7 @@ The settings are:
 | `reviewers` | list of GitHub handlers of your team mates to pick from. Note that Goreview will not pick the author of the pull request. |
 | `webhook_url` | URL to push a success payload from Goreview, if any _(in progress)_ |
 
+> NOTE: Goreview fetches this `goreview.json` from the pull request branch itself.
 
 ### Quick setup
 You can download the [latest Docker image at Docker Hub](https://hub.docker.com/r/kelvintaywl/goreview/), and run it.
@@ -60,15 +62,15 @@ Use [ngrok](https://ngrok.com/3) to expose this local server publicly.
 ```shell
 $ ngrok http 5000
 
-ngrok by @inconshreveable                                                                                                                        (Ctrl+C to quit)
-                                                                                                                                                                 
-Session Status                online                                                                                                                             
-Update                        update available (version 2.2.8, Ctrl-U to update)                                                                                 
-Version                       2.1.18                                                                                                                             
-Region                        United States (us)                                                                                                                 
-Web Interface                 http://127.0.0.1:4040                                                                                                              
-Forwarding                    http://11111111.ngrok.io -> localhost:500                                                                                        
-Forwarding                    https://11111111.ngrok.io -> localhost:5000     
+ngrok by @inconshreveable
+
+Session Status                online
+Update                        update available (version 2.2.8, Ctrl-U to update)
+Version                       2.1.18
+Region                        United States (us)
+Web Interface                 http://127.0.0.1:4040
+Forwarding                    http://11111111.ngrok.io -> localhost:5000
+Forwarding                    https://11111111.ngrok.io -> localhost:5000
 ```
 
 ### Adding Server to GitHub's webhooks
