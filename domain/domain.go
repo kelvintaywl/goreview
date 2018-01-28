@@ -35,6 +35,13 @@ type (
 		PullRequest PullRequestPayload `json:"pull_request"`
 	}
 
+	AssignReviewersResponsePayload struct {
+		URL       string   `json:"url"`
+		Number    int64    `json:"number"`
+		Repo      string   `json:"repo"`
+		Reviewers []string `json:"reviewers"`
+	}
+
 	ReviewConfig struct {
 		NumReviewers int      `json:"num_reviewers" default:"2"`
 		Reviewers    []string `json:"reviewers"`

@@ -82,6 +82,32 @@ In the case of this repository, go to https://github.com/pipedpiper/nothotdog/se
 
 > You should replace `pipedpiper/nothotdog`  with an actual organization/repo :doughnut:  
 
+Because Goreview app server listens to GitHub hooks on the `/hooks` endpoint and expects JSON payload,
+
+please set your webhook on your Github repo as follow:
+
+![Setting URL for Webhooks on GitHub repository](img/gh_webhook_setup.png "Setting URL for Webhooks on GitHub repository")
+
+
+Also, select `Pull Request` as the specific event to trigger webhooks.
+
+![Select Pull Request as specific event for webhook trigger](img/gh_webhook_event_select.png "Select Pull Request as specific event for webhook trigger")
+
+### POST payload (optional)
+
+If a webhook URL is specified in the repository's `goreview.json`, Goreview will post a payload on successful assignment of reviewers to that URL.
+
+See sample payload (JSON):
+
+```json
+{
+	"url": "https://api.github.com/repos/pipedpiper/nothotdog/pulls/7",
+	"number": 7,
+	"repo": "pipedpier/nothotdog",
+	"reviewers": ["gilfoyle", "dinesh"]
+}
+```
+
 ## Contributing
 
 Feel free to make pull requests! Let me know if this is useful / fun / stupid, and if your team is using this! :beer:

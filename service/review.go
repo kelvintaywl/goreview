@@ -1,10 +1,14 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math/rand"
+	"net/http"
+	"time"
 
 	"github.com/kelvintaywl/goreview/domain"
 	er "github.com/kelvintaywl/goreview/domain/errors"
@@ -64,6 +68,29 @@ func RandomReviewers(ctx context.Context, cfg domain.ReviewConfig, exclude strin
 	return suggested, nil
 }
 
+// PostWebhook ...
+func PostWebhook(ctx context.Context, data domain.PullRequestEventPayload, url string, reviewers []string) error {
+	p := domain.AssignReviewersResponsePayload{
+		URL:       data.PullRequest.URL,
+		Number:    data.PullRequest.Number,
+		Repo:      data.Repository.FullName,
+		Reviewers: reviewers,
+	}
+	bmsg, err := json.Marshal(p)
+	if err != nil {
+		return errors.New("unable to parse response into JSON")
+	}
+	cli := &http.Client{Timeout: time.Second * 10}
+	resp, err := cli.Post(url, "application/json", bytes.NewBuffer(bmsg))
+	if err != nil || 400 <= resp.StatusCode {
+		if err != nil {
+			fmt.Printf("Error posting HTTP: %v", err)
+		}
+		return fmt.Errorf("failed to send payload to webhook url: %s", url)
+	}
+	return nil
+}
+
 // AssignReviewers ...
 func AssignReviewers(ctx context.Context, data domain.PullRequestEventPayload, cfg domain.ReviewConfig) error {
 	gc := NewGithubClient(ctx)
@@ -72,11 +99,19 @@ func AssignReviewers(ctx context.Context, data domain.PullRequestEventPayload, c
 		return err
 	}
 
-	return gc.AssignReviewers(
+	err = gc.AssignReviewers(
 		ctx,
 		data.Repository.Owner.Name,
 		data.Repository.Name,
 		int(data.PullRequest.Number),
 		reviewers,
 	)
+	if err != nil {
+		return err
+	}
+	if len(cfg.WebhookURL) > 0 {
+		fmt.Printf("Sending Webhooks: %s, for reviewers: %v", cfg.WebhookURL, reviewers)
+		return PostWebhook(ctx, data, cfg.WebhookURL, reviewers)
+	}
+	return nil
 }
